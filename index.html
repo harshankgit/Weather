@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather website</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-transform: uppercase;
+            background-color: blue;
+            color: aliceblue;
+            font-size: 40px;
+            text-align: center;
+        }
+
+        .main {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: skyblue;
+        }
+
+        .box {
+            width: 300px;
+            min-height: 300px;
+            background-color: darkcyan;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 4px 4px 7px rgba(1, 0, 1, 0.7);
+            position: relative;
+        }
+
+        #search {
+            padding: 10px;
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .weather {
+            font-size: 60px;
+            text-align: center;
+            border: 4px dotted gold;
+            border-radius: 20px;
+        }
+
+        .row {
+            font-size: 30px;
+        }
+
+        .ha {
+            position: absolute;
+            right: 20px;
+            margin-top: 10px;
+        }
+
+        .icon {
+            text-align: center;
+            /* margin-top: 20px;
+            margin-bottom: 10px; */
+            border-bottom: 1px solid white;
+        }
+    </style>
+</head>
+
+<body>
+    <header>Weather Website</header>
+    <div class="main">
+
+        <div class="box">
+            <form action="">
+                <input type="search" id="search" placeholder="search city here...." autocomplete="none">
+            </form>
+
+            <div class="weather1" id="weather1">
+                <!-- <div class="weather">32 &#8451</div>
+            <div class="row">
+
+                <div class="icon">s</div>
+
+                <div class="ha">Haze</div>
+
+
+            </div> -->
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        const API_KEY = `29f9f486fd4e421389df658348f4a41d`;
+        const form = document.querySelector("form");
+        const search = document.querySelector("#search");
+        const weather = document.querySelector("#weather1");
+
+
+        const getweather = async (city) => {
+            weather.innerHTML = `<h2> Loading....<h2>`;
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+            const response = await fetch(url);
+            const data = await response.json();
+            console.log(data)
+            return showWeather(data);
+        }
+
+        const showWeather = (data) => {
+            if (data.cod == "404") {
+                weather.innerHTML = `<h2> City Not Found <h2>`;
+                return;
+            }
+            weather.innerHTML = `
+
+            <div class="weather">${data.main.temp}&#8451</div>
+            <div class="row">
+
+                <div class="icon">
+                    <div>
+                <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="weather">
+            </div></div>
+
+                <div class="ha">${data.weather[0].main}</div>
+
+
+            </div>
+            `
+            search.value = ""
+        }
+        form.addEventListener("submit", function (event) {
+     
+            event.preventDefault();
+            getweather(search.value);
+        })
+
+    </script>
+</body>
+
+</html>
+<!-- <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="">
+const API = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
+const url = https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric -->
